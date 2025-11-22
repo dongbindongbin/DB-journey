@@ -1,0 +1,32 @@
+WITH grade AS (
+    SELECT 'Python' AS SKILL, SUM(CODE) AS CODE
+    FROM SKILLCODES 
+    WHERE NAME = 'Python'
+    
+    UNION
+    SELECT 'C#' AS SKILL, CODE
+    FROM SKILLCODES 
+    WHERE NAME = 'C#'
+    
+    UNION
+    SELECT 'Front' AS SKILL, SUM(CODE) AS CODE
+    FROM SKILLCODES 
+    WHERE CATEGORY = 'Front End'
+)
+
+SELECT
+    CASE
+        WHEN D.SKILL_CODE & (SELECT CODE FROM grade WHERE SKILL = 'Python')
+            AND D.SKILL_CODE & (SELECT CODE FROM grade WHERE SKILL = 'Front') > 0
+            THEN 'A'
+        WHEN D.SKILL_CODE & (SELECT CODE FROM grade WHERE SKILL = 'C#') > 0
+            THEN 'B'
+        WHEN (D.SKILL_CODE & (SELECT CODE FROM grade WHERE SKILL = 'Front')) > 0
+            THEN 'C'
+        ELSE NULL
+    END AS GRADE,
+    D.ID,
+    D.EMAIL
+FROM DEVELOPERS D
+HAVING GRADE IS NOT NULL
+ORDER BY GRADE ASC, ID ASC;
