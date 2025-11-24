@@ -1,0 +1,16 @@
+WITH sorted AS (
+    SELECT 
+     e.ID,
+     ROW_NUMBER() OVER (ORDER BY e.SIZE_OF_COLONY DESC) AS 등,
+     count(*) OVER () AS TOTAL
+    FROM ECOLI_DATA e
+)
+SELECT ID,
+ case 
+  WHEN 등 <= TOTAL / 4 THEN 'CRITICAL'
+  WHEN TOTAL / 4 < 등 AND 등 <= TOTAL / 2 THEN 'HIGH'
+  WHEN TOTAL / 2 < 등 AND 등 <= (TOTAL / 4) * 3 THEN 'MEDIUM'
+  WHEN (TOTAL / 4) * 3 < 등 THEN 'LOW'
+ END AS COLONY_NAME
+FROM sorted
+ORDER BY ID ASC;
