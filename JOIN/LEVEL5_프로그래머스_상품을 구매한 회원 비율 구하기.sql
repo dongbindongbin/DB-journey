@@ -23,4 +23,4 @@ ORDER BY YEAR ASC, MONTH ASC
 
 /* 2 (실수형으로 변환)
 COUNT(DISTINCT OS.USER_ID) * 1.0
-*/
+*/ 
